@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="es"><head>
 <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Home · HRV</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="/styles.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/gv.css">
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script src="/assets/gv-shared.js"></script>
 </head><body>
 <div class="topbar"><div class="container inner">
 <div class="left">
@@ -23,6 +25,12 @@
 <div class="iconbtn">❤️</div>
 <div class="iconbtn">👤</div>
 </div>
+</div>
+<div id="header-actions">
+  <button class="js-nav-icon" aria-label="Buscar">🔍</button>
+  <button class="js-nav-icon" aria-label="Favoritos">❤️</button>
+  <button class="js-nav-icon" aria-label="Cuenta">👤</button>
+  <button id="btn-acceso" class="btn-acceso" hidden>Acceso</button>
 </div>
 </header>
 <div class="container">
@@ -130,18 +138,43 @@
 <div><h4>Redes sociales</h4><ul class="small"><li>Instagram</li><li>Youtube</li><li>Facebook</li></ul></div>
 </div>
 </footer>
-<button aria-label="Abrir chat Sandra" class="fab">
+<button aria-label="Abrir chat Sandra" class="fab" id="open-sandra-modal" onclick="openSandraModal()">
 <span class="fab-badge">●</span>
 <svg viewbox="0 0 24 24"><path d="M12 3a9 9 0 100 18 9 9 0 000-18zm-1 5h2v5h-2V8zm1 8a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"></path></svg>
 </button>
-<script>
-      document.addEventListener('click',e=>{
-        if(e.target.closest('.fab')){
-          window.location.href='https://wa.me/34600000000?text=Hola%20Sandra%2C%20necesito%20ayuda';
-        }
-      });
-    </script><input accept="image/*" id="logo-file" style="display:none" type="file"/><input accept="image/*" id="hero-file" style="display:none" type="file"/>  <script defer src="assets/identity-nav.js"></script>
-  <script defer src="assets/attach-reserva-links.js"></script>
-  <script src="assets/sandra-client.js"></script>
+<script src="assets/identity-nav.js"></script>
+<script src="assets/attach-reserva-links.js"></script>
 <script src="/assets/listings.js"></script>
-</body></html>
+<div class="modal-overlay" id="sandra-app-modal">
+  <div class="app-container" id="sandra-app-container">
+    <div class="status-panel">
+      <h2>Sandra IA</h2>
+      <div class="status-dot" id="status-dot"></div>
+      <button onclick="closeSandraModal()">✕</button>
+    </div>
+    <div class="avatar-wrap">
+      <div id="avatar-image" class="avatar-image">S</div>
+      <div class="status-message" id="status-message">Conectando...</div>
+    </div>
+    <div class="chat-log" id="chat-log"></div>
+    <div class="feature-buttons">
+      <button onclick="handleFeatureRequest('recommend')">Recomendar Propiedad ✨</button>
+      <button onclick="handleFeatureRequest('whatsapp')">Redactar Mensaje WhatsApp ✨</button>
+      <button onclick="handleFeatureRequest('description')">Generar Descripción ✨</button>
+      <button onclick="handleFeatureRequest('itinerary')">Generar Itinerario ✨</button>
+      <button onclick="handleFeatureRequest('quote')">Generar Presupuesto ✨</button>
+      <button onclick="handleFeatureRequest('welcome-guide')">Generar Guía de Bienvenida ✨</button>
+      <button onclick="handleFeatureRequest('translate')">Traducir Chat ✨</button>
+    </div>
+    <div class="control-panel">
+      <button id="mic-button">🎤</button>
+      <button id="speaker-button">🔈</button>
+      <input type="text" id="text-input" placeholder="Escribe a Sandra..."/>
+      <button id="send-button">Enviar</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+<script src="/assets/sandra-client.js"></script>
+</body>
+</html>
