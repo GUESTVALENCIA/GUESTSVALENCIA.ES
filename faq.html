@@ -1,0 +1,44 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FAQ · Guests Valencia</title><link rel="stylesheet" href="./styles.css"></head><body>
+<header class="site-header">
+<div class="container header-inner">
+<a class="brand" href="/index.html"><span class="brand-mark">HV</span> HouseRentValencia</a><div id="weather-mini" style="margin-left:12px;font-weight:700"></div>
+<nav class="nav"><a href="/index.html">Inicio</a><a href="/alojamientos.html">Alojamientos</a><a href="/servicios.html">Servicios</a><a href="/propietarios.html">Propietarios</a><a href="/contacto.html">Contacto</a><a href="/blog.html">Blog</a></nav>
+<div class="actions">
+<div class="iconbtn">🔍</div>
+<div class="iconbtn">❤️</div>
+<div class="iconbtn">👤</div>
+</div>
+</div>
+</header>
+<main class="container">
+  <h1>Preguntas frecuentes</h1>
+  <div id="faq">
+    <details><summary>¿Cómo empiezo?</summary><p>Cuéntanos tu propiedad y objetivos. Te proponemos plan y alta en plataformas.</p></details>
+    <details><summary>¿Gestionáis varias propiedades?</summary><p>Sí, con panel unificado, precios dinámicos y reporting por unidad.</p></details>
+    <details><summary>¿Qué incluye la opción Full?</summary><p>Operativa completa: reservas, atención 24/7, limpieza, mantenimiento y optimización.</p></details>
+  </div>
+  <button id="faq-voice" class="btn primary" style="margin:14px 0">Reproducir con Sandra</button>
+</main>
+<footer class="footer">
+<div class="container cols">
+<div>
+<h3>HouseRentValencia</h3>
+<p class="small">Avda de la Marina 318, 03720 Benissa, Alicante</p>
+<p class="small">+34 966 497 016 · +34 663 30 61 74 · hello@tuweb.com</p>
+</div>
+<div><h4>Información</h4><ul class="small"><li>Experiencias</li><li>Alquiler de invierno</li><li>Alojamiento</li><li>Venta</li><li>Nosotros</li><li>Contacto</li></ul></div>
+<div><h4>Ayuda legal</h4><ul class="small"><li>Condiciones generales</li><li>Política de cookies</li><li>Política de privacidad</li><li>Aviso legal</li></ul></div>
+<div><h4>Redes sociales</h4><ul class="small"><li>Instagram</li><li>Youtube</li><li>Facebook</li></ul></div>
+</div>
+</footer>
+<script>
+document.getElementById('faq-voice').addEventListener('click', async function(){ 
+  var text = Array.from(document.querySelectorAll('#faq details summary')).map(function(s){ return s.textContent.trim(); }).join('. ');
+  var r = await fetch('/.netlify/functions/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text})});
+  var j = await r.json(); if(j.audioData){ var a=new Audio('data:'+(j.mimeType||'audio/wav')+';base64,'+j.audioData); a.play(); }
+});
+</script>
+<script src="./assets/app.js" defer></script>
+</body></html>

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "ruzafa-suite",
+    "title": "Ruzafa · Suite luminosa",
+    "location": "Ruzafa",
+    "guests": 2,
+    "beds": 1,
+    "baths": 1,
+    "price": 78,
+    "rating": 4.8,
+    "img": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80",
+    "gallery": [
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=60",
+      "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1400&q=60"
+    ],
+    "amenities": [
+      "Wifi",
+      "Aire acondicionado",
+      "Cafetera",
+      "Lavadora"
+    ]
+  },
+  {
+    "id": "artes-loft",
+    "title": "Ciudad de las Artes · Loft",
+    "location": "Ciudad de las Artes",
+    "guests": 3,
+    "beds": 1,
+    "baths": 1,
+    "price": 92,
+    "rating": 4.7,
+    "img": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=60",
+    "gallery": [
+      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=60",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=60",
+      "https://images.unsplash.com/photo-1613553425988-2d58728a?auto=format&fit=crop&w=1400&q=60"
+    ],
+    "amenities": [
+      "Wifi",
+      "Ascensor",
+      "Parking",
+      "Smart TV"
+    ]
+  },
+  {
+    "id": "cabanal-atico",
+    "title": "El Cabañal · Ático terraza",
+    "location": "El Cabañal",
+    "guests": 4,
+    "beds": 2,
+    "baths": 1,
+    "price": 110,
+    "rating": 4.9,
+    "img": "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=60",
+    "gallery": [
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1400&q=60",
+      "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1400&q=60",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1400&q=60"
+    ],
+    "amenities": [
+      "Vistas al mar",
+      "Terraza",
+      "Climatización",
+      "Cocina equipada"
+    ]
+  }
+]

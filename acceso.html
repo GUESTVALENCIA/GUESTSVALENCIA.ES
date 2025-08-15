@@ -1,0 +1,14 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Acceso • Guests Valencia</title>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<style>body{font-family:system-ui;margin:20px} .card{max-width:640px;margin:20px auto;border:1px solid #e5e7eb;border-radius:12px;padding:16px}</style>
+</head><body>
+<div class="card"><h1>Registro / Inicio de sesión</h1><button id="open" style="padding:10px 14px;border-radius:10px">Abrir Identity</button><p id="status">Estado: no conectado.</p><p><a id="panel" href="/panel/" style="display:none">Ir al panel »</a></p></div>
+<script>
+const s=document.getElementById('status'); const link=document.getElementById('panel');
+netlifyIdentity.on('init', u=>{ s.textContent=u?('Conectado: '+(u.email||'usuario')):'Estado: no conectado.'; link.style.display=u?'inline':'none'; });
+netlifyIdentity.on('login', u=>{ s.textContent='Conectado: '+(u.email||'usuario'); link.style.display='inline'; netlifyIdentity.close(); });
+netlifyIdentity.on('logout', ()=>{ s.textContent='Estado: no conectado.'; link.style.display='none'; });
+netlifyIdentity.init(); document.getElementById('open').onclick=()=>netlifyIdentity.open();
+</script></body></html>

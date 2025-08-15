@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ruzafa · Suite luminosa</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header style="padding:12px 16px;"><a href="/alojamientos.html">← Volver a Alojamientos</a></header>
+  <main class="container" style="max-width:1100px;margin:0 auto;padding:16px;">
+    <h1 style="margin:6px 0 10px 0;">Ruzafa · Suite luminosa</h1>
+    <p style="color:#64748b;margin:0 0 16px 0;">Ruzafa · 2 huéspedes · 1 dormitorio · 1 baño · ⭐ 4.8</p>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+      <div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80" style="width:100%;height:220px;object-fit:cover;border-radius:12px;">
+<img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1400&q=60" style="width:100%;height:220px;object-fit:cover;border-radius:12px;">
+<img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1400&q=60" style="width:100%;height:220px;object-fit:cover;border-radius:12px;">
+        </div>
+        <section style="margin-top:18px;">
+          <h2>Servicios</h2>
+          <ul>
+            <li>Wifi</li>
+<li>Aire acondicionado</li>
+<li>Cafetera</li>
+<li>Lavadora</li>
+          </ul>
+        </section>
+      </div>
+      <aside style="border:1px solid #e5e7eb;border-radius:12px;padding:16px;position:sticky;top:16px;height:fit-content;">
+        <h3 style="margin-top:0;">Reserva instantánea</h3>
+        <p style="margin:6px 0 14px 0;"><strong>€78</strong> / noche</p>
+        <label>Entrada
+          <input id="checkin" type="date" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:8px;">
+        </label>
+        <label>Salida
+          <input id="checkout" type="date" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:8px;">
+        </label>
+        <label>Personas
+          <input id="guests" type="number" min="1" value="2" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:8px;">
+        </label>
+        <div style="margin:10px 0;color:#64748b" id="quote">Selecciona fechas para calcular</div>
+        <button id="reserveBtn" style="width:100%;padding:10px;background:#19C37D;color:#fff;border:none;border-radius:10px;cursor:pointer;">Reservar ahora</button>
+        <button id="voiceHelp" style="margin-top:8px;width:100%;padding:10px;background:#0ea5e9;color:#fff;border:none;border-radius:10px;cursor:pointer;">Escuchar ayuda de Sandra</button>
+      </aside>
+    </div>
+  </main>
+  <script>
+    const price = 78;
+    const quote = document.getElementById('quote');
+    const checkin = document.getElementById('checkin');
+    const checkout = document.getElementById('checkout');
+    const guests = document.getElementById('guests');
+    function daysBetween(a,b){return Math.max(1, Math.ceil((b-a)/86400000));}
+    function updateQuote(){
+      if(!checkin.value || !checkout.value){quote.textContent='Selecciona fechas para calcular';return;}
+      const d1 = new Date(checkin.value), d2 = new Date(checkout.value);
+      if(isNaN(d1) || isNaN(d2) || d2<=d1){quote.textContent='Fechas inválidas';return;}
+      const nights = daysBetween(d1,d2);
+      const total = nights * price;
+      quote.textContent = `${nights} noches · Total estimado €${total}`;
+    }
+    checkin.addEventListener('change', updateQuote);
+    checkout.addEventListener('change', updateQuote);
+    document.getElementById('reserveBtn').addEventListener('click', () => {
+      const params = new URLSearchParams();
+      const d1 = checkin.value, d2 = checkout.value;
+      if(!d1 || !d2){alert('Selecciona fechas');return;}
+      const nights = Math.max(1, (new Date(d2)-new Date(d1))/86400000);
+      params.set('amount', (nights*price).toFixed(2));
+      params.set('from', d1);
+      params.set('to', d2);
+      params.set('guests', guests.value);
+      params.set('listing', 'ruzafa-suite');
+      window.location.href = `/reservar.html?${params.toString()}`;
+    });
+    document.getElementById('voiceHelp').addEventListener('click', async () => {
+      try{
+        const r = await fetch('/.netlify/functions/sandra-tts', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text: 'Para reservar, elige fechas de entrada y salida, indica personas y pulsa Reservar ahora. Confirmo tu pago al momento.'})});
+        if(!r.ok){alert('Audio no disponible.');return;}
+        const blob = await r.blob();
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        audio.play();
+      }catch(e){}
+    });
+  </script>
+  <script src="/assets/sandra-client.js"></script>
+</body>
+</html>

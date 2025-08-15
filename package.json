@@ -1,0 +1,12 @@
+{
+  "name": "guestsvalencia",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "netlify dev",
+    "build": "echo \"No build step\""
+  },
+  "dependencies": {
+    "@netlify/blobs": "^6.5.0"
+  }
+}

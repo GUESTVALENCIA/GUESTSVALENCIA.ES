@@ -1,0 +1,30 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Reservar</title><style>body{font-family:system-ui;margin:20px;max-width:720px}</style></head>
+<body><h1>Reservar</h1><p>Sandbox/Live según PAYPAL_MODE. Define ?amount=50 en la URL o escribe un importe.</p>
+<input id="amount" placeholder="Importe EUR"/><button id="pay">Pagar</button><div id="paypal-container" style="margin-top:20px"></div>
+<script>
+function q(k,d){const u=new URL(location.href);return u.searchParams.get(k)||d;}
+document.getElementById('amount').value=q('amount','50.00');
+async function ensureSDK(){
+  const u = new URL(location.href);
+  const cid = u.searchParams.get('cid');
+  let clientId = cid;
+  if(!clientId){
+    const r = await fetch('/api/paypal-client-id');
+    const d = await r.json();
+    if(!d.clientId) throw new Error('Falta PAYPAL_CLIENT_ID');
+    clientId = d.clientId;
+  }
+  await new Promise((resolve,reject)=>{
+    const s = document.createElement('script');
+    s.src = 'https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(clientId)+'&currency=EUR';
+    s.onload = resolve;
+    s.onerror = ()=>reject(new Error('No PayPal SDK'));
+    document.head.appendChild(s);
+  });
+}); }
+async function render(){ const amount=document.getElementById('amount').value.trim()||'50.00'; await ensureSDK(); paypal.Buttons({ createOrder: async()=>{ const r=await fetch('/api/paypal-create-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount})}); const d=await r.json(); if(!d.ok) throw new Error('No se pudo crear el pedido'); return d.id; }, onApprove: async (data)=>{ const r=await fetch('/api/paypal-capture-order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:data.orderID})}); const d=await r.json(); if(d.ok){ location.href='/success.html'; } else { alert('Error: '+JSON.stringify(d.error||d)); location.href='/cancel.html'; } }, onCancel: ()=>location.href='/cancel.html', onError: (err)=>alert('Error: '+err.message) }).render('#paypal-container'); }
+document.getElementById('pay').onclick=render;
+</script>  <script src="assets/sandra-client.js"></script>
+</body></html>

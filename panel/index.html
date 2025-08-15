@@ -1,0 +1,94 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel de Gestión - Guests Valencia</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:900px;margin:40px auto;padding:0 16px}
+    h1{margin-bottom:8px} .card{border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin:16px 0}
+    label{display:block;margin-top:8px} select,button{padding:8px 12px;border-radius:8px;border:1px solid #d1d5db}
+    button{cursor:pointer}
+    .row{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}
+  </style>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <h1>Panel de Gestión</h1>
+  <p>Inicia sesión con Netlify Identity y asigna el rol <b>admin</b> para poder guardar la configuración.</p>
+
+  <div class="card">
+    <h2>Modelos por categoría</h2>
+    <div class="row">
+      <label>Visitantes
+        <select id="model-visitor">
+          <option value="gpt-4o-mini">gpt-4o-mini</option>
+          <option value="gpt-4o">gpt-4o</option>
+        </select>
+      </label>
+      <label>Huéspedes
+        <select id="model-guest">
+          <option value="gpt-4o-mini">gpt-4o-mini</option>
+          <option value="gpt-4o">gpt-4o</option>
+        </select>
+      </label>
+      <label>Premium
+        <select id="model-premium">
+          <option value="gpt-4o">gpt-4o</option>
+          <option value="gpt-4o-mini">gpt-4o-mini</option>
+        </select>
+      </label>
+      <button id="save" disabled>Guardar</button>
+      <button id="reload">Recargar</button>
+    </div>
+    <pre id="status"></pre>
+  </div>
+
+<script>
+function api(path){ return `/.netlify/functions/${path}`; }
+
+async function loadConfig(){
+  const r = await fetch(api('model-config'));
+  if(!r.ok){ document.getElementById('status').textContent = 'Error al cargar configuración'; return; }
+  const cfg = await r.json();
+  document.getElementById('model-visitor').value = cfg?.roles?.visitor || 'gpt-4o-mini';
+  document.getElementById('model-guest').value   = cfg?.roles?.guest   || 'gpt-4o-mini';
+  document.getElementById('model-premium').value = cfg?.roles?.premium || 'gpt-4o';
+  document.getElementById('status').textContent = JSON.stringify(cfg, null, 2);
+}
+
+async function saveConfig(){
+  const token = window.netlifyIdentity?.currentUser()?.token?.access_token;
+  if(!token){ alert('Debes iniciar sesión como admin.'); return; }
+  const body = {
+    defaultModel: document.getElementById('model-guest').value, // opcional
+    roles: {
+      visitor: document.getElementById('model-visitor').value,
+      guest:   document.getElementById('model-guest').value,
+      premium: document.getElementById('model-premium').value
+    }
+  };
+  const r = await fetch(api('model-config'), {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'Authorization': `Bearer ${token}` },
+    body: JSON.stringify(body)
+  });
+  document.getElementById('status').textContent = r.ok ? 'Guardado OK' : 'Error al guardar';
+  if(r.ok) loadConfig();
+}
+
+document.getElementById('reload').onclick = loadConfig;
+document.getElementById('save').onclick = saveConfig;
+
+window.netlifyIdentity.on('init', user => {
+  document.getElementById('save').disabled = !user;
+});
+window.netlifyIdentity.on('login', () => { document.getElementById('save').disabled = false; loadConfig(); });
+window.netlifyIdentity.on('logout', () => { document.getElementById('save').disabled = true; });
+
+window.netlifyIdentity.init();
+loadConfig();
+</script>
+</body>
+</html>
